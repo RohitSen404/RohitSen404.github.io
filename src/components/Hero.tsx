@@ -105,7 +105,7 @@ const Hero = () => {
 
         {/* Social Links */}
         <div className="flex gap-6 justify-center">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hero-social">
+          <a href="https://github.com/Rohitsen579" target="_blank" rel="noopener noreferrer" className="hero-social">
             <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:text-primary transition-all hover:scale-110">
               <Github className="w-6 h-6" />
             </Button>
