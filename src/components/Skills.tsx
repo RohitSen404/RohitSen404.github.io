@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Progress } from "@/components/ui/progress";
-import { Code, Shield, Camera, Palette, MessageCircle } from "lucide-react";
+import { Code, Shield, Camera, Palette, MessageCircle, Network, Cpu, Database, Cloud, Brain, FileCode, Server } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,6 +29,13 @@ const Skills = () => {
 
   const skills = [
     { name: "Web Development", level: 90, icon: Code, color: "text-primary" },
+    { name: "Python Programming", level: 88, icon: FileCode, color: "text-primary" },
+    { name: "Database Management System", level: 85, icon: Database, color: "text-secondary" },
+    { name: "Advance Computer Network", level: 82, icon: Network, color: "text-accent" },
+    { name: "Internet of Things (IoT)", level: 80, icon: Cpu, color: "text-primary" },
+    { name: "Oracle Cloud Infrastructure", level: 85, icon: Cloud, color: "text-secondary" },
+    { name: "AI Foundation", level: 83, icon: Brain, color: "text-accent" },
+    { name: "Microsoft Azure", level: 78, icon: Server, color: "text-primary" },
     { name: "Ethical Hacking", level: 85, icon: Shield, color: "text-secondary" },
     { name: "Photography", level: 88, icon: Camera, color: "text-accent" },
     { name: "Art & Design", level: 82, icon: Palette, color: "text-primary" },
