@@ -105,17 +105,17 @@ const Hero = () => {
 
         {/* Social Links */}
         <div className="flex gap-6 justify-center">
-          <a href="https://github.com/Rohitsen579" target="_blank" rel="noopener noreferrer" className="hero-social">
+          <a href="https://github.com/RohitSen404" target="_blank" rel="noopener noreferrer" className="hero-social">
             <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:text-primary transition-all hover:scale-110">
               <Github className="w-6 h-6" />
             </Button>
           </a>
-          <a href="https://www.linkedin.com/in/rohit-sen-941a9b256" target="_blank" rel="noopener noreferrer" className="hero-social">
+          <a href="https://www.linkedin.com/in/rohit-sen-941a9b256?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener noreferrer" className="hero-social">
             <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:text-primary transition-all hover:scale-110">
               <Linkedin className="w-6 h-6" />
             </Button>
           </a>
-          <a href="mailto:contact@rohit.dev" className="hero-social">
+          <a href="mailto:rohitsen7501@gmail.com" className="hero-social">
             <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:text-primary transition-all hover:scale-110">
               <Mail className="w-6 h-6" />
             </Button>

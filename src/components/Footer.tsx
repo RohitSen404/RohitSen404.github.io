@@ -44,7 +44,7 @@ const Footer = () => {
           {/* Social Links */}
           <div className="flex gap-4">
             <a 
-              href="https://github.com" 
+              href="https://github.com/RohitSen404" 
               target="_blank" 
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-muted/30 flex items-center justify-center hover:bg-primary/20 hover:text-primary transition-all hover:scale-110"
@@ -52,7 +52,7 @@ const Footer = () => {
               <Github className="w-5 h-5" />
             </a>
             <a 
-              href="https://linkedin.com" 
+              href="https://www.linkedin.com/in/rohit-sen-941a9b256?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" 
               target="_blank" 
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-muted/30 flex items-center justify-center hover:bg-primary/20 hover:text-primary transition-all hover:scale-110"
@@ -60,7 +60,7 @@ const Footer = () => {
               <Linkedin className="w-5 h-5" />
             </a>
             <a 
-              href="mailto:contact@rohit.dev"
+              href="mailto:rohitsen7501@gmail.com"
               className="w-10 h-10 rounded-full bg-muted/30 flex items-center justify-center hover:bg-primary/20 hover:text-primary transition-all hover:scale-110"
             >
               <Mail className="w-5 h-5" />
@@ -70,8 +70,8 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="text-center mt-8 pt-6 border-t border-border/30">
-          <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
-            Made with <Heart className="w-4 h-4 text-primary animate-glow-pulse" /> by Rohit Sen © 2025
+          <p className="text-sm text-muted-foreground">
+            © 2025 Rohit Sen. All rights reserved.
           </p>
         </div>
       </div>
