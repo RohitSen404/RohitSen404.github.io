@@ -58,7 +58,7 @@ const Loader = ({ onComplete }: LoaderProps) => {
         {/* Progress bar */}
         <div className="w-64 md:w-96 h-1 bg-muted/30 rounded-full overflow-hidden mx-auto mb-4">
           <div 
-            className="h-full bg-gradient-to-r from-primary via-secondary to-accent transition-all duration-100"
+            className="h-full bg-gradient-to-r from-primary via-secondary to-primary/60 transition-all duration-100"
             style={{ width: `${progress}%` }}
           ></div>
         </div>
