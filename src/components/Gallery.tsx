@@ -95,7 +95,7 @@ const Gallery = () => {
 
       <div className="container max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 glow-text-purple">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 glow-text-warm">
             Photography Gallery
           </h2>
           <p className="text-muted-foreground text-lg">

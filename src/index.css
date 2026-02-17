@@ -8,46 +8,46 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 220 40% 3%;
-    --foreground: 180 100% 90%;
+    --background: 210 20% 5%;
+    --foreground: 200 15% 90%;
 
-    --card: 220 30% 8%;
-    --card-foreground: 180 100% 90%;
+    --card: 210 15% 9%;
+    --card-foreground: 200 15% 90%;
 
-    --popover: 220 30% 8%;
-    --popover-foreground: 180 100% 90%;
+    --popover: 210 15% 9%;
+    --popover-foreground: 200 15% 90%;
 
-    --primary: 180 100% 50%;
-    --primary-foreground: 220 40% 3%;
+    --primary: 175 70% 45%;
+    --primary-foreground: 210 20% 5%;
 
-    --secondary: 260 80% 60%;
-    --secondary-foreground: 180 100% 90%;
+    --secondary: 200 25% 35%;
+    --secondary-foreground: 200 15% 90%;
 
-    --muted: 220 20% 15%;
-    --muted-foreground: 180 20% 60%;
+    --muted: 210 15% 14%;
+    --muted-foreground: 200 10% 55%;
 
-    --accent: 280 100% 70%;
-    --accent-foreground: 220 40% 3%;
+    --accent: 38 60% 55%;
+    --accent-foreground: 210 20% 5%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 65% 50%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 30% 15%;
-    --input: 220 30% 12%;
-    --ring: 180 100% 50%;
+    --border: 210 15% 15%;
+    --input: 210 15% 12%;
+    --ring: 175 70% 45%;
 
     --radius: 0.75rem;
 
-    --glow-cyan: 180 100% 50%;
-    --glow-blue: 220 100% 60%;
-    --glow-purple: 280 100% 70%;
+    --glow-cyan: 175 70% 45%;
+    --glow-blue: 200 50% 45%;
+    --glow-warm: 38 60% 55%;
     
-    --gradient-cyber: linear-gradient(135deg, hsl(180 100% 50% / 0.1), hsl(280 100% 70% / 0.1));
-    --gradient-glow: linear-gradient(180deg, hsl(180 100% 50% / 0.05), transparent);
+    --gradient-cyber: linear-gradient(135deg, hsl(175 70% 45% / 0.08), hsl(200 25% 35% / 0.08));
+    --gradient-glow: linear-gradient(180deg, hsl(175 70% 45% / 0.04), transparent);
     
-    --shadow-cyan-lg: 0 0 60px hsl(180 100% 50% / 0.3);
-    --shadow-cyan-md: 0 0 30px hsl(180 100% 50% / 0.2);
-    --shadow-purple-lg: 0 0 60px hsl(280 100% 70% / 0.3);
+    --shadow-cyan-lg: 0 0 50px hsl(175 70% 45% / 0.2);
+    --shadow-cyan-md: 0 0 25px hsl(175 70% 45% / 0.15);
+    --shadow-warm-lg: 0 0 50px hsl(38 60% 55% / 0.15);
     
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -59,18 +59,18 @@ All colors MUST be HSL.
   }
   
   .glow-text-cyan {
-    text-shadow: 0 0 20px hsl(var(--glow-cyan) / 0.5),
-                 0 0 40px hsl(var(--glow-cyan) / 0.3);
+    text-shadow: 0 0 15px hsl(var(--glow-cyan) / 0.4),
+                 0 0 30px hsl(var(--glow-cyan) / 0.2);
   }
   
-  .glow-text-purple {
-    text-shadow: 0 0 20px hsl(var(--glow-purple) / 0.5),
-                 0 0 40px hsl(var(--glow-purple) / 0.3);
+  .glow-text-warm {
+    text-shadow: 0 0 15px hsl(var(--glow-warm) / 0.4),
+                 0 0 30px hsl(var(--glow-warm) / 0.2);
   }
   
   .glow-border-cyan {
-    box-shadow: 0 0 20px hsl(var(--glow-cyan) / 0.3),
-                inset 0 0 20px hsl(var(--glow-cyan) / 0.1);
+    box-shadow: 0 0 15px hsl(var(--glow-cyan) / 0.2),
+                inset 0 0 15px hsl(var(--glow-cyan) / 0.05);
   }
   
   .grid-pattern {
