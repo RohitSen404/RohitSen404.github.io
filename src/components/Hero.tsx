@@ -56,19 +56,18 @@ const Hero = () => {
       {/* Grid pattern background */}
       <div className="absolute inset-0 grid-pattern opacity-10"></div>
       
-      {/* Spline 3D Background - zoomed into orb area */}
-      <div className="spline-container absolute inset-0 z-0">
+      {/* Spline 3D Background */}
+      <div className="spline-container absolute inset-0 z-0 opacity-70">
         <iframe 
-          src='https://my.spline.design/reactiveorb-AyJQJ9Nc8hPxtiySe5vrUZmR/'
-          className="absolute border-0"
+          src='https://my.spline.design/nexbotrobotcharacterconcept-UxSpioUJOV5jSeiXLMkR0z0E/'
+          className="w-full h-full border-0"
           title="3D Background"
-          style={{ width: '180%', height: '180%', top: '-50%', left: '-30%', pointerEvents: 'none' }}
+          style={{ pointerEvents: 'none' }}
         />
       </div>
 
-      {/* Dark overlay to hide Spline's built-in text */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-background via-background/70 to-background/40"></div>
-      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-background/60 via-transparent to-background/60"></div>
+      {/* Subtle overlay for text readability */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-background/80 via-transparent to-background/30"></div>
 
       {/* Floating orbs */}
       <div className="absolute top-20 left-20 w-72 h-72 bg-primary/20 rounded-full blur-[120px] animate-float"></div>
