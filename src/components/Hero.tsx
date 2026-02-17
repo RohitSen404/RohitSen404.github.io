@@ -56,17 +56,19 @@ const Hero = () => {
       {/* Grid pattern background */}
       <div className="absolute inset-0 grid-pattern opacity-10"></div>
       
-      {/* Gradient overlays */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 via-transparent to-secondary/5"></div>
-      
-      {/* Spline 3D Background */}
-      <div className="spline-container absolute inset-0 z-0 opacity-60">
+      {/* Spline 3D Background - zoomed into orb area */}
+      <div className="spline-container absolute inset-0 z-0">
         <iframe 
-          src='https://my.spline.design/reactiveorb-AyJQJ9Nc8hPxtiySe5vrUZmR/' 
-          className="w-full h-full"
+          src='https://my.spline.design/reactiveorb-AyJQJ9Nc8hPxtiySe5vrUZmR/'
+          className="absolute border-0"
           title="3D Background"
+          style={{ width: '180%', height: '180%', top: '-50%', left: '-30%', pointerEvents: 'none' }}
         />
       </div>
+
+      {/* Dark overlay to hide Spline's built-in text */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-background via-background/70 to-background/40"></div>
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-background/60 via-transparent to-background/60"></div>
 
       {/* Floating orbs */}
       <div className="absolute top-20 left-20 w-72 h-72 bg-primary/20 rounded-full blur-[120px] animate-float"></div>
@@ -124,7 +126,7 @@ const Hero = () => {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-10">
         <div className="w-6 h-10 border-2 border-primary/50 rounded-full p-1">
           <div className="w-1 h-3 bg-primary rounded-full mx-auto animate-glow-pulse"></div>
         </div>
