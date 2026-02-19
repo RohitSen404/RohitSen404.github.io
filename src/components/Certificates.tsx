@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import cert1 from "@/assets/certificate-1.png";
 import cert2 from "@/assets/certificate-2.png";
 import cert3 from "@/assets/certificate-3.png";
+import cert4 from "@/assets/certificate-4.png";
 import { Award } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -47,6 +48,12 @@ const Certificates = () => {
       title: "Industrial Internship",
       description: "Python programming internship with Voting Management System project",
       tech: ["Python", "Django", "Development"]
+    },
+    {
+      image: cert4,
+      title: "Android App Development",
+      description: "Ardent Computech - Industrial internship on Android App Development with Contact Manager project",
+      tech: ["Android", "Java", "Mobile"]
     }
   ];
 

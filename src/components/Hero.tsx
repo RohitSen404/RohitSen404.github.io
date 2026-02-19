@@ -59,7 +59,7 @@ const Hero = () => {
       {/* Spline 3D Background */}
       <div className="spline-container absolute inset-0 z-0 opacity-70">
         <iframe 
-          src='https://my.spline.design/nexbotrobotcharacterconcept-UxSpioUJOV5jSeiXLMkR0z0E/'
+          src='https://my.spline.design/theeternalarc-wKjjKEhw50yVWQvUigYpe9bt-VqJ/'
           className="w-full h-full border-0"
           title="3D Background"
           style={{ pointerEvents: 'none' }}
