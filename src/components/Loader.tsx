@@ -47,11 +47,11 @@ const Loader = ({ onComplete }: LoaderProps) => {
       <div className="absolute inset-0 grid-pattern opacity-20"></div>
       
       {/* Floating orbs */}
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/20 rounded-full blur-[100px] animate-float"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary/20 rounded-full blur-[100px] animate-float" style={{ animationDelay: "1s" }}></div>
+      <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-[100px] animate-float" style={{ background: 'rgba(63, 99, 255, 0.1)' }}></div>
+      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-[100px] animate-float" style={{ background: 'rgba(28, 47, 110, 0.12)', animationDelay: '1s' }}></div>
 
       <div className="relative z-10 text-center">
-        <h1 className="loader-text text-6xl md:text-8xl font-bold mb-8 glow-text-cyan">
+        <h1 className="loader-text text-6xl md:text-8xl font-bold mb-8 hero-gradient-text" style={{ textShadow: '0 0 40px rgba(255,255,255,0.08)' }}>
           ROHIT
         </h1>
         

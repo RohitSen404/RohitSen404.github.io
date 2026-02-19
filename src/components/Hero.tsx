@@ -52,9 +52,9 @@ const Hero = () => {
   };
 
   return (
-    <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
       {/* Grid pattern background */}
-      <div className="absolute inset-0 grid-pattern opacity-10"></div>
+      <div className="absolute inset-0 grid-pattern opacity-[0.04]"></div>
       
       {/* Spline 3D Background */}
       <div className="spline-container absolute inset-0 z-0 opacity-70">
@@ -67,67 +67,71 @@ const Hero = () => {
       </div>
 
       {/* Subtle overlay for text readability */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-background/80 via-transparent to-background/30"></div>
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-background/90 via-background/50 to-transparent"></div>
 
-      {/* Floating orbs */}
-      <div className="absolute top-20 left-20 w-72 h-72 bg-primary/20 rounded-full blur-[120px] animate-float"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-secondary/15 rounded-full blur-[140px] animate-float" style={{ animationDelay: "1.5s" }}></div>
+      {/* Atmospheric blue glows */}
+      <div className="absolute top-20 left-20 w-[500px] h-[500px] rounded-full blur-[200px] animate-float" style={{ background: 'rgba(63, 99, 255, 0.08)' }}></div>
+      <div className="absolute bottom-20 right-40 w-[400px] h-[400px] rounded-full blur-[180px] animate-float" style={{ background: 'rgba(28, 47, 110, 0.12)', animationDelay: '1.5s' }}></div>
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 text-center">
-        <h1 className="hero-title text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
-          Hi, I'm <span className="glow-text-cyan">Rohit</span>
-        </h1>
-        
-        <p className="hero-subtitle text-xl md:text-3xl text-muted-foreground mb-12 max-w-3xl mx-auto">
-          Web Developer & Creative Technologist
-        </p>
-
-        <div className="hero-cta flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-          <Button 
-            size="lg" 
-            className="bg-primary hover:bg-primary/90 text-primary-foreground glow-border-cyan group px-8 py-6 text-lg"
-            onClick={scrollToContact}
-          >
-            <span className="group-hover:scale-110 inline-block transition-transform">
-              Hire Me
-            </span>
-          </Button>
+      {/* Content — left-aligned cinematic composition */}
+      <div className="relative z-10 container mx-auto px-6 md:px-12 lg:px-20">
+        <div className="max-w-2xl">
+          <h1 className="hero-title text-5xl md:text-7xl lg:text-8xl font-bold mb-6" style={{ textShadow: '0 0 40px rgba(255,255,255,0.08)' }}>
+            Hi, I'm <span className="hero-gradient-text">Rohit</span>
+          </h1>
           
-          <Button 
-            size="lg" 
-            variant="outline"
-            className="border-primary/50 hover:bg-primary/10 text-foreground px-8 py-6 text-lg"
-            onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
-          >
-            View Work
-          </Button>
-        </div>
+          <p className="hero-subtitle text-xl md:text-2xl mb-12 max-w-xl" style={{ color: 'rgba(255,255,255,0.55)' }}>
+            Web Developer & Creative Technologist
+          </p>
 
-        {/* Social Links */}
-        <div className="flex gap-6 justify-center">
-          <a href="https://github.com/RohitSen404" target="_blank" rel="noopener noreferrer" className="hero-social">
-            <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:text-primary transition-all hover:scale-110">
-              <Github className="w-6 h-6" />
+          <div className="hero-cta flex flex-col sm:flex-row gap-4 items-start mb-12">
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground group px-8 py-6 text-lg border-0"
+              style={{ boxShadow: '0 0 30px rgba(199, 168, 90, 0.25)' }}
+              onClick={scrollToContact}
+            >
+              <span className="group-hover:scale-110 inline-block transition-transform">
+                Hire Me
+              </span>
             </Button>
-          </a>
-          <a href="https://www.linkedin.com/in/rohit-sen-941a9b256?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener noreferrer" className="hero-social">
-            <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:text-primary transition-all hover:scale-110">
-              <Linkedin className="w-6 h-6" />
+            
+            <Button 
+              size="lg" 
+              variant="outline"
+              className="border-primary/40 hover:bg-primary/10 px-8 py-6 text-lg"
+              style={{ color: '#EDEFF5' }}
+              onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              View Work
             </Button>
-          </a>
-          <a href="mailto:rohitsen7501@gmail.com" className="hero-social">
-            <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:text-primary transition-all hover:scale-110">
-              <Mail className="w-6 h-6" />
-            </Button>
-          </a>
+          </div>
+
+          {/* Social Links */}
+          <div className="flex gap-6">
+            <a href="https://github.com/RohitSen404" target="_blank" rel="noopener noreferrer" className="hero-social">
+              <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:text-primary transition-all hover:scale-110">
+                <Github className="w-6 h-6" />
+              </Button>
+            </a>
+            <a href="https://www.linkedin.com/in/rohit-sen-941a9b256?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener noreferrer" className="hero-social">
+              <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:text-primary transition-all hover:scale-110">
+                <Linkedin className="w-6 h-6" />
+              </Button>
+            </a>
+            <a href="mailto:rohitsen7501@gmail.com" className="hero-social">
+              <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:text-primary transition-all hover:scale-110">
+                <Mail className="w-6 h-6" />
+              </Button>
+            </a>
+          </div>
         </div>
       </div>
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-10">
-        <div className="w-6 h-10 border-2 border-primary/50 rounded-full p-1">
-          <div className="w-1 h-3 bg-primary rounded-full mx-auto animate-glow-pulse"></div>
+        <div className="w-6 h-10 border-2 border-primary/40 rounded-full p-1">
+          <div className="w-1 h-3 bg-primary/60 rounded-full mx-auto animate-glow-pulse"></div>
         </div>
       </div>
     </section>
