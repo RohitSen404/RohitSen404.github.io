@@ -1,12 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail } from "lucide-react";
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-
+  const [splineLoaded, setSplineLoaded] = useState(false);
   useEffect(() => {
+    // Delay Spline load for faster initial paint
+    const timer = setTimeout(() => setSplineLoaded(true), 800);
+
     const tl = gsap.timeline({ delay: 0.3 });
     
     tl.from(".hero-title", {
@@ -45,6 +48,7 @@ const Hero = () => {
       ease: "power1.inOut"
     });
 
+    return () => clearTimeout(timer);
   }, []);
 
   const scrollToContact = () => {
@@ -57,13 +61,16 @@ const Hero = () => {
       <div className="absolute inset-0 grid-pattern opacity-[0.04]"></div>
       
       {/* Spline 3D Background */}
-      <div className="spline-container absolute inset-0 z-0 opacity-70">
-        <iframe 
-          src='https://my.spline.design/theeternalarc-wKjjKEhw50yVWQvUigYpe9bt-VqJ/'
-          className="w-full h-full border-0"
-          title="3D Background"
-          style={{ pointerEvents: 'none' }}
-        />
+      <div className="spline-container absolute inset-0 z-0 transition-opacity duration-1000" style={{ opacity: splineLoaded ? 0.7 : 0 }}>
+        {splineLoaded && (
+          <iframe 
+            src='https://my.spline.design/theeternalarc-wKjjKEhw50yVWQvUigYpe9bt-VqJ/'
+            className="w-full h-full border-0"
+            title="3D Background"
+            loading="lazy"
+            style={{ pointerEvents: 'none' }}
+          />
+        )}
       </div>
 
       {/* Subtle overlay for text readability */}

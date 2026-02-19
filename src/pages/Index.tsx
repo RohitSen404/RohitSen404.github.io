@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import Loader from "@/components/Loader";
 import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Certificates from "@/components/Certificates";
-import Skills from "@/components/Skills";
-import Gallery from "@/components/Gallery";
-import Ratings from "@/components/Ratings";
 
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
+const About = lazy(() => import("@/components/About"));
+const Certificates = lazy(() => import("@/components/Certificates"));
+const Skills = lazy(() => import("@/components/Skills"));
+const Gallery = lazy(() => import("@/components/Gallery"));
+const Ratings = lazy(() => import("@/components/Ratings"));
+const Contact = lazy(() => import("@/components/Contact"));
+const Footer = lazy(() => import("@/components/Footer"));
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
@@ -33,13 +33,15 @@ const Index = () => {
       {!loading && (
         <>
           <Hero />
-          <About />
-          <Certificates />
-          <Skills />
-          <Gallery />
-          <Ratings />
-          <Contact />
-          <Footer />
+          <Suspense fallback={<div className="min-h-screen bg-background" />}>
+            <About />
+            <Certificates />
+            <Skills />
+            <Gallery />
+            <Ratings />
+            <Contact />
+            <Footer />
+          </Suspense>
         </>
       )}
     </div>
