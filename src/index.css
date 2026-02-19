@@ -8,46 +8,51 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 210 20% 5%;
-    --foreground: 200 15% 90%;
+    /* Deep blue-black backgrounds: #070B14, #0B1220, #111A2F, #05080F */
+    --background: 222 35% 5%;
+    --foreground: 228 20% 94%;
 
-    --card: 210 15% 9%;
-    --card-foreground: 200 15% 90%;
+    --card: 222 30% 8%;
+    --card-foreground: 228 20% 94%;
 
-    --popover: 210 15% 9%;
-    --popover-foreground: 200 15% 90%;
+    --popover: 222 30% 8%;
+    --popover-foreground: 228 20% 94%;
 
-    --primary: 175 70% 45%;
-    --primary-foreground: 210 20% 5%;
+    /* Muted gold accent: #C7A85A */
+    --primary: 42 50% 57%;
+    --primary-foreground: 222 35% 5%;
 
-    --secondary: 200 25% 35%;
-    --secondary-foreground: 200 15% 90%;
+    /* Soft blue glow: #2A46B8 */
+    --secondary: 226 62% 44%;
+    --secondary-foreground: 228 20% 94%;
 
-    --muted: 210 15% 14%;
-    --muted-foreground: 200 10% 55%;
+    --muted: 222 25% 12%;
+    --muted-foreground: 225 15% 55%;
 
-    --accent: 38 60% 55%;
-    --accent-foreground: 210 20% 5%;
+    /* Warm gold hover: #D2B36A */
+    --accent: 42 52% 62%;
+    --accent-foreground: 222 35% 5%;
 
     --destructive: 0 65% 50%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 210 15% 15%;
-    --input: 210 15% 12%;
-    --ring: 175 70% 45%;
+    --border: 222 20% 14%;
+    --input: 222 25% 10%;
+    --ring: 42 50% 57%;
 
     --radius: 0.75rem;
 
-    --glow-cyan: 175 70% 45%;
-    --glow-blue: 200 50% 45%;
-    --glow-warm: 38 60% 55%;
+    /* Glow tokens */
+    --glow-gold: 42 50% 57%;
+    --glow-blue: 226 62% 44%;
+    --glow-blue-bright: 228 100% 62%;
     
-    --gradient-cyber: linear-gradient(135deg, hsl(175 70% 45% / 0.08), hsl(200 25% 35% / 0.08));
-    --gradient-glow: linear-gradient(180deg, hsl(175 70% 45% / 0.04), transparent);
+    --gradient-deep: linear-gradient(180deg, hsl(222 35% 5%), hsl(222 30% 8%), hsl(224 30% 13%));
+    --gradient-glow: linear-gradient(180deg, hsl(228 100% 62% / 0.04), transparent);
     
-    --shadow-cyan-lg: 0 0 50px hsl(175 70% 45% / 0.2);
-    --shadow-cyan-md: 0 0 25px hsl(175 70% 45% / 0.15);
-    --shadow-warm-lg: 0 0 50px hsl(38 60% 55% / 0.15);
+    --shadow-blue-lg: 0 0 50px hsl(228 100% 62% / 0.15);
+    --shadow-blue-md: 0 0 25px hsl(228 100% 62% / 0.08);
+    --shadow-gold-lg: 0 0 50px hsl(42 50% 57% / 0.15);
     
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -55,22 +60,26 @@ All colors MUST be HSL.
 
 @layer utilities {
   .glass-card {
-    @apply bg-card/40 backdrop-blur-xl border border-border/50;
+    @apply bg-card/30 backdrop-blur-xl border border-white/[0.08];
+    box-shadow: 0 0 40px hsl(228 100% 62% / 0.05);
+  }
+  
+  .glass-card:hover {
+    box-shadow: 0 0 40px hsl(228 100% 62% / 0.15);
   }
   
   .glow-text-cyan {
-    text-shadow: 0 0 15px hsl(var(--glow-cyan) / 0.4),
-                 0 0 30px hsl(var(--glow-cyan) / 0.2);
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
   }
   
   .glow-text-warm {
-    text-shadow: 0 0 15px hsl(var(--glow-warm) / 0.4),
-                 0 0 30px hsl(var(--glow-warm) / 0.2);
+    text-shadow: 0 0 20px hsl(var(--glow-gold) / 0.3),
+                 0 0 40px hsl(var(--glow-gold) / 0.15);
   }
   
   .glow-border-cyan {
-    box-shadow: 0 0 15px hsl(var(--glow-cyan) / 0.2),
-                inset 0 0 15px hsl(var(--glow-cyan) / 0.05);
+    box-shadow: 0 0 20px hsl(var(--glow-blue) / 0.2),
+                inset 0 0 15px hsl(var(--glow-blue) / 0.05);
   }
   
   .grid-pattern {
@@ -78,6 +87,13 @@ All colors MUST be HSL.
       linear-gradient(hsl(var(--border)) 1px, transparent 1px),
       linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px);
     background-size: 40px 40px;
+  }
+
+  .hero-gradient-text {
+    background: linear-gradient(90deg, #C9CCD6, #7F8FEA);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }
 
@@ -88,5 +104,10 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #EDEFF5;
   }
 }
