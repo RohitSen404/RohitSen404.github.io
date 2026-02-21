@@ -67,6 +67,24 @@ All colors MUST be HSL.
   .glass-card:hover {
     box-shadow: 0 0 40px hsl(228 100% 62% / 0.15);
   }
+
+  .skill-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .skill-card:hover {
+    box-shadow: 0 0 30px rgba(63, 99, 255, 0.15);
+    transform: scale(1.05);
+  }
+
+  .skill-card-icon {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .skill-card:hover .skill-card-icon {
+    color: #C7A85A;
+  }
   
   .glow-text-cyan {
     text-shadow: 0 0 40px rgba(255, 255, 255, 0.08);

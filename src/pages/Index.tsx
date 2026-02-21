@@ -4,7 +4,7 @@ import Hero from "@/components/Hero";
 
 const About = lazy(() => import("@/components/About"));
 const Certificates = lazy(() => import("@/components/Certificates"));
-const Skills = lazy(() => import("@/components/Skills"));
+
 const Gallery = lazy(() => import("@/components/Gallery"));
 const Ratings = lazy(() => import("@/components/Ratings"));
 const Contact = lazy(() => import("@/components/Contact"));
@@ -36,7 +36,7 @@ const Index = () => {
           <Suspense fallback={<div className="min-h-screen bg-background" />}>
             <About />
             <Certificates />
-            <Skills />
+            
             <Gallery />
             <Ratings />
             <Contact />
