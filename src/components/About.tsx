@@ -100,12 +100,15 @@ Beyond code, I’m also a mobile photographer and digital artist, bringing a cre
 
             {/* Skills Grid */}
             <div className="skills-grid grid grid-cols-3 sm:grid-cols-4 gap-3 pt-6">
-              {skills.map((skill, index) => (
-                <div key={index} className="skill-icon skill-card p-4 rounded-lg transition-all duration-300 cursor-pointer">
-                  <skill.icon className="w-7 h-7 mb-2 transition-colors duration-300 skill-card-icon" strokeWidth={1.5} />
-                  <p className="text-xs font-medium text-muted-foreground">{skill.name}</p>
-                </div>
-              ))}
+              {skills.map((skill, index) => {
+                const Icon = skill.icon;
+                return (
+                  <div key={index} className="skill-icon skill-card p-4 rounded-lg transition-all duration-300 cursor-pointer">
+                    <Icon className="w-7 h-7 mb-2 transition-colors duration-300 skill-card-icon" strokeWidth={1.5} />
+                    <p className="text-xs font-medium text-muted-foreground">{skill.name}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
