@@ -21,10 +21,6 @@ const About = () => {
       scrollTrigger: { trigger: section, start: "top 70%" },
       opacity: 0, x: 60, filter: "blur(10px)", duration: 1, ease: "power3.out"
     });
-    gsap.from(".skill-icon", {
-      scrollTrigger: { trigger: ".skills-grid", start: "top 85%" },
-      opacity: 0, y: 30, stagger: 0.06, duration: 0.5, ease: "back.out(1.7)"
-    });
   }, []);
 
   const skills = [
