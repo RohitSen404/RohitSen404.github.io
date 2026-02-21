@@ -2,7 +2,10 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import profileImage from "@/assets/profile.jpg";
-import { Code2, Database, Layout, Sparkles } from "lucide-react";
+import { 
+  Code2, Database, Layout, Sparkles, Shield, Camera, Palette, 
+  MessageCircle, Network, Cpu, Cloud, Brain, FileCode, Server 
+} from "lucide-react";
 gsap.registerPlugin(ScrollTrigger);
 const About = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -38,28 +41,25 @@ const About = () => {
       },
       opacity: 0,
       y: 30,
-      stagger: 0.1,
-      duration: 0.6,
+      stagger: 0.08,
+      duration: 0.5,
       ease: "back.out(1.7)"
     });
   }, []);
-  const skills = [{
-    icon: Code2,
-    name: "React & TypeScript",
-    color: "text-primary"
-  }, {
-    icon: Layout,
-    name: "Tailwind CSS",
-    color: "text-secondary"
-  }, {
-    icon: Sparkles,
-    name: "GSAP Animations",
-    color: "text-accent"
-  }, {
-    icon: Database,
-    name: "Python & AI",
-    color: "text-primary"
-  }];
+  const skills = [
+    { icon: FileCode, name: "Python" },
+    { icon: Network, name: "Networking" },
+    { icon: Cpu, name: "IoT" },
+    { icon: Database, name: "DBMS" },
+    { icon: Cloud, name: "Oracle Cloud" },
+    { icon: Brain, name: "AI Foundation" },
+    { icon: Server, name: "Azure" },
+    { icon: Code2, name: "Web Dev" },
+    { icon: Shield, name: "Ethical Hacking" },
+    { icon: Camera, name: "Photography" },
+    { icon: Palette, name: "Art & Design" },
+    { icon: MessageCircle, name: "Communication" },
+  ];
   return <section id="about" ref={sectionRef} className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 grid-pattern opacity-5"></div>
       
@@ -99,11 +99,13 @@ Beyond code, I’m also a mobile photographer and digital artist, bringing a cre
             </p>
 
             {/* Skills Grid */}
-            <div className="skills-grid grid grid-cols-2 gap-4 pt-6">
-              {skills.map((skill, index) => <div key={index} className="skill-icon glass-card p-4 rounded-lg hover:glow-border-cyan transition-all duration-300 group cursor-pointer">
-                  <skill.icon className={`w-8 h-8 ${skill.color} mb-2 group-hover:scale-110 transition-transform`} />
-                  <p className="text-sm font-medium">{skill.name}</p>
-                </div>)}
+            <div className="skills-grid grid grid-cols-3 sm:grid-cols-4 gap-3 pt-6">
+              {skills.map((skill, index) => (
+                <div key={index} className="skill-icon skill-card p-4 rounded-lg transition-all duration-300 cursor-pointer">
+                  <skill.icon className="w-7 h-7 mb-2 transition-colors duration-300 skill-card-icon" strokeWidth={1.5} />
+                  <p className="text-xs font-medium text-muted-foreground">{skill.name}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
