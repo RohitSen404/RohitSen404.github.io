@@ -29,7 +29,7 @@ const Hero = () => {
       .from(".hero-subtitle", { opacity: 0, y: 30, filter: "blur(8px)", duration: 0.8, ease: "power2.out" }, "-=0.5")
       .from(".hero-cta", { opacity: 0, scale: 0.8, duration: 0.6, ease: "back.out(1.7)" }, "-=0.3")
       .from(".hero-social", { opacity: 0, y: 20, stagger: 0.1, duration: 0.5 }, "-=0.4")
-      .from(".hero-image", { opacity: 0, scale: 1.1, filter: "blur(20px)", duration: 1.2, ease: "power3.out" }, 0);
+      .from(".hero-image", { opacity: 0, scale: 1.05, duration: 1.2, ease: "power3.out" }, 0);
 
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [handleMouseMove]);
@@ -49,7 +49,7 @@ const Hero = () => {
           ref={imageRef}
           src={heroBg}
           alt=""
-          className="w-full h-full object-cover object-center md:object-[60%_center] lg:object-[65%_center] opacity-60 select-none pointer-events-none will-change-transform"
+          className="w-full h-full object-cover object-center md:object-[60%_center] lg:object-[65%_center] select-none pointer-events-none will-change-transform"
           draggable={false}
           style={{ minHeight: "100%", minWidth: "100%" }}
         />
