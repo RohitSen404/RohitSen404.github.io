@@ -1,38 +1,34 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail } from "lucide-react";
-import heroBg from "@/assets/hero-bg.png";
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!imageRef.current || !heroRef.current) return;
-    const { clientX, clientY } = e;
-    const { innerWidth, innerHeight } = window;
-    const x = (clientX / innerWidth - 0.5) * 30;
-    const y = (clientY / innerHeight - 0.5) * 20;
-    gsap.to(imageRef.current, {
-      x, y,
-      duration: 0.8,
-      ease: "power2.out",
-    });
-  }, []);
+  const unicornRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    window.addEventListener("mousemove", handleMouseMove);
+    // Load UnicornStudio script
+    const existingScript = document.querySelector('script[src*="unicornStudio"]');
+    if (!existingScript) {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.5/dist/unicornStudio.umd.js";
+      script.onload = () => {
+        (window as any).UnicornStudio?.init();
+      };
+      document.head.appendChild(script);
+    } else {
+      (window as any).UnicornStudio?.init();
+    }
 
+    // GSAP entrance animations
     const tl = gsap.timeline({ delay: 0.3 });
     tl.from(".hero-title", { opacity: 0, y: 50, filter: "blur(10px)", duration: 1, ease: "power3.out" })
       .from(".hero-subtitle", { opacity: 0, y: 30, filter: "blur(8px)", duration: 0.8, ease: "power2.out" }, "-=0.5")
       .from(".hero-cta", { opacity: 0, scale: 0.8, duration: 0.6, ease: "back.out(1.7)" }, "-=0.3")
       .from(".hero-social", { opacity: 0, y: 20, stagger: 0.1, duration: 0.5 }, "-=0.4")
-      .from(".hero-image", { opacity: 0, scale: 1.05, duration: 1.2, ease: "power3.out" }, 0);
-
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [handleMouseMove]);
+      .from(".hero-3d", { opacity: 0, scale: 1.05, duration: 1.2, ease: "power3.out" }, 0);
+  }, []);
 
   const scrollToContact = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
@@ -43,16 +39,13 @@ const Hero = () => {
       {/* Grid pattern background */}
       <div className="absolute inset-0 grid-pattern opacity-[0.04]"></div>
 
-      {/* Interactive hero image */}
-      <div className="hero-image absolute inset-0 z-0 flex items-center justify-center md:justify-end">
-        <img
-          ref={imageRef}
-          src={heroBg}
-          alt=""
-          className="w-full h-full object-cover object-center md:object-[60%_center] lg:object-[65%_center] select-none pointer-events-none will-change-transform"
-          draggable={false}
-          style={{ minHeight: "100%", minWidth: "100%" }}
-        />
+      {/* UnicornStudio 3D Interactive Model */}
+      <div className="hero-3d absolute inset-0 z-0">
+        <div
+          ref={unicornRef}
+          data-us-project="0N8TXzXyp90TNK7JtIAs"
+          style={{ width: "100%", height: "100%" }}
+        ></div>
       </div>
 
       {/* Overlay for text readability */}
