@@ -1,55 +1,38 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail } from "lucide-react";
+import heroBg from "@/assets/hero-bg.png";
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const [splineLoaded, setSplineLoaded] = useState(false);
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!imageRef.current || !heroRef.current) return;
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    const x = (clientX / innerWidth - 0.5) * 30;
+    const y = (clientY / innerHeight - 0.5) * 20;
+    gsap.to(imageRef.current, {
+      x, y,
+      duration: 0.8,
+      ease: "power2.out",
+    });
+  }, []);
+
   useEffect(() => {
-    // Delay Spline load for faster initial paint
-    const timer = setTimeout(() => setSplineLoaded(true), 800);
+    window.addEventListener("mousemove", handleMouseMove);
 
     const tl = gsap.timeline({ delay: 0.3 });
-    
-    tl.from(".hero-title", {
-      opacity: 0,
-      y: 50,
-      filter: "blur(10px)",
-      duration: 1,
-      ease: "power3.out"
-    })
-    .from(".hero-subtitle", {
-      opacity: 0,
-      y: 30,
-      filter: "blur(8px)",
-      duration: 0.8,
-      ease: "power2.out"
-    }, "-=0.5")
-    .from(".hero-cta", {
-      opacity: 0,
-      scale: 0.8,
-      duration: 0.6,
-      ease: "back.out(1.7)"
-    }, "-=0.3")
-    .from(".hero-social", {
-      opacity: 0,
-      y: 20,
-      stagger: 0.1,
-      duration: 0.5
-    }, "-=0.4");
+    tl.from(".hero-title", { opacity: 0, y: 50, filter: "blur(10px)", duration: 1, ease: "power3.out" })
+      .from(".hero-subtitle", { opacity: 0, y: 30, filter: "blur(8px)", duration: 0.8, ease: "power2.out" }, "-=0.5")
+      .from(".hero-cta", { opacity: 0, scale: 0.8, duration: 0.6, ease: "back.out(1.7)" }, "-=0.3")
+      .from(".hero-social", { opacity: 0, y: 20, stagger: 0.1, duration: 0.5 }, "-=0.4")
+      .from(".hero-image", { opacity: 0, scale: 1.1, filter: "blur(20px)", duration: 1.2, ease: "power3.out" }, 0);
 
-    // Floating animation for spline container
-    gsap.to(".spline-container", {
-      y: -15,
-      duration: 3,
-      repeat: -1,
-      yoyo: true,
-      ease: "power1.inOut"
-    });
-
-    return () => clearTimeout(timer);
-  }, []);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [handleMouseMove]);
 
   const scrollToContact = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
@@ -59,52 +42,48 @@ const Hero = () => {
     <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
       {/* Grid pattern background */}
       <div className="absolute inset-0 grid-pattern opacity-[0.04]"></div>
-      
-      {/* Spline 3D Background */}
-      <div className="spline-container absolute inset-0 z-0 transition-opacity duration-1000" style={{ opacity: splineLoaded ? 0.7 : 0 }}>
-        {splineLoaded && (
-          <iframe 
-            src='https://my.spline.design/theeternalarc-wKjjKEhw50yVWQvUigYpe9bt-VqJ/'
-            className="w-full h-full border-0"
-            title="3D Background"
-            loading="lazy"
-            style={{ pointerEvents: 'none' }}
-          />
-        )}
+
+      {/* Interactive hero image */}
+      <div className="hero-image absolute inset-0 z-0 flex items-center justify-center md:justify-end">
+        <img
+          ref={imageRef}
+          src={heroBg}
+          alt=""
+          className="w-full h-full object-cover object-center md:object-[60%_center] lg:object-[65%_center] opacity-60 select-none pointer-events-none will-change-transform"
+          draggable={false}
+          style={{ minHeight: "100%", minWidth: "100%" }}
+        />
       </div>
 
-      {/* Subtle overlay for text readability */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-background/90 via-background/50 to-transparent"></div>
+      {/* Overlay for text readability */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-background via-background/70 to-background/20"></div>
 
-      {/* Atmospheric blue glows */}
+      {/* Atmospheric glows */}
       <div className="absolute top-20 left-20 w-[500px] h-[500px] rounded-full blur-[200px] animate-float" style={{ background: 'rgba(63, 99, 255, 0.08)' }}></div>
       <div className="absolute bottom-20 right-40 w-[400px] h-[400px] rounded-full blur-[180px] animate-float" style={{ background: 'rgba(28, 47, 110, 0.12)', animationDelay: '1.5s' }}></div>
 
-      {/* Content — left-aligned cinematic composition */}
+      {/* Content */}
       <div className="relative z-10 container mx-auto px-6 md:px-12 lg:px-20">
         <div className="max-w-2xl">
           <h1 className="hero-title text-5xl md:text-7xl lg:text-8xl font-bold mb-6" style={{ textShadow: '0 0 40px rgba(255,255,255,0.08)' }}>
             Hi, I'm <span className="hero-gradient-text">Rohit</span>
           </h1>
-          
+
           <p className="hero-subtitle text-xl md:text-2xl mb-12 max-w-xl" style={{ color: 'rgba(255,255,255,0.55)' }}>
             Web Developer & Creative Technologist
           </p>
 
           <div className="hero-cta flex flex-col sm:flex-row gap-4 items-start mb-12">
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground group px-8 py-6 text-lg border-0"
               style={{ boxShadow: '0 0 30px rgba(199, 168, 90, 0.25)' }}
               onClick={scrollToContact}
             >
-              <span className="group-hover:scale-110 inline-block transition-transform">
-                Hire Me
-              </span>
+              <span className="group-hover:scale-110 inline-block transition-transform">Hire Me</span>
             </Button>
-            
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               variant="outline"
               className="border-primary/40 hover:bg-primary/10 px-8 py-6 text-lg"
               style={{ color: '#EDEFF5' }}
