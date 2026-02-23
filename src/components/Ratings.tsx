@@ -8,7 +8,6 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface Rating {
   id: string;
-  visitor_name: string;
   rating: number;
   comment: string | null;
   created_at: string;
@@ -53,6 +52,7 @@ const Ratings = () => {
     setIsSubmitting(true);
 
     const { error } = await supabase.from("ratings").insert({
+      visitor_name: "Anonymous",
       rating: selectedRating,
       comment: comment.trim() || null,
     });
