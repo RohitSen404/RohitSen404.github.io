@@ -1,22 +1,60 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import profileImage from "@/assets/profile.jpg";
+import profileImage from "@/assets/profile-new.png";
 import { 
   Cloud, Network, Brain, FileCode, Database, Shield, Cpu, Lightbulb,
   Code2, Camera, Palette, Server
 } from "lucide-react";
 gsap.registerPlugin(ScrollTrigger);
 
+const GRID_COLS = 5;
+const GRID_ROWS = 5;
+
 const About = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section) return;
-    gsap.from(".about-image", {
-      scrollTrigger: { trigger: section, start: "top 70%" },
-      opacity: 0, x: -60, filter: "blur(10px)", duration: 1, ease: "power3.out"
+    const container = imageContainerRef.current;
+    if (!section || !container) return;
+
+    const pieces = container.querySelectorAll<HTMLDivElement>(".shatter-piece");
+
+    // Set initial scattered state
+    pieces.forEach((piece) => {
+      gsap.set(piece, {
+        opacity: 0,
+        scale: 0.3,
+        x: gsap.utils.random(-200, 200),
+        y: gsap.utils.random(-200, 200),
+        rotation: gsap.utils.random(-90, 90),
+        filter: "blur(8px)",
+      });
     });
+
+    // Animate pieces joining together on scroll
+    gsap.to(pieces, {
+      scrollTrigger: {
+        trigger: section,
+        start: "top 80%",
+        end: "top 30%",
+        scrub: 1,
+      },
+      opacity: 1,
+      scale: 1,
+      x: 0,
+      y: 0,
+      rotation: 0,
+      filter: "blur(0px)",
+      stagger: {
+        each: 0.03,
+        from: "center",
+      },
+      ease: "power3.out",
+    });
+
     gsap.from(".about-content", {
       scrollTrigger: { trigger: section, start: "top 70%" },
       opacity: 0, x: 60, filter: "blur(10px)", duration: 1, ease: "power3.out"
@@ -38,20 +76,61 @@ const About = () => {
     { icon: Palette, name: "Art & Design" },
   ];
 
+  // Generate grid pieces
+  const pieces = [];
+  for (let row = 0; row < GRID_ROWS; row++) {
+    for (let col = 0; col < GRID_COLS; col++) {
+      const xPercent = (col / GRID_COLS) * 100;
+      const yPercent = (row / GRID_ROWS) * 100;
+      const wPercent = 100 / GRID_COLS;
+      const hPercent = 100 / GRID_ROWS;
+      pieces.push(
+        <div
+          key={`${row}-${col}`}
+          className="shatter-piece absolute overflow-hidden"
+          style={{
+            left: `${xPercent}%`,
+            top: `${yPercent}%`,
+            width: `${wPercent}%`,
+            height: `${hPercent}%`,
+          }}
+        >
+          <img
+            src={profileImage}
+            alt="Rohit Sen"
+            className="absolute w-full h-full object-cover"
+            style={{
+              /* Position the full image so this piece shows the correct portion */
+              width: `${GRID_COLS * 100}%`,
+              height: `${GRID_ROWS * 100}%`,
+              left: `${-col * 100}%`,
+              top: `${-row * 100}%`,
+              objectFit: "cover",
+            }}
+          />
+        </div>
+      );
+    }
+  }
+
   return (
     <section id="about" ref={sectionRef} className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 grid-pattern opacity-5" />
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-accent/10 rounded-full blur-[120px] animate-float" />
 
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-12 items-start">
-          {/* Image */}
-          <div className="about-image">
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-gradient-to-r from-primary to-secondary rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
-              <div className="relative w-80 h-80 mx-auto rounded-full overflow-hidden border-4 border-primary/30 group-hover:border-primary/60 transition-all group-hover:scale-105 duration-500">
-                <img src={profileImage} alt="Rohit Sen" className="w-full h-full object-cover" />
-              </div>
+          {/* Shattered Image */}
+          <div className="about-image flex items-center justify-center">
+            <div
+              ref={imageContainerRef}
+              className="relative w-[340px] h-[420px] mx-auto"
+              style={{
+                /* Blend edges with page background using mask */
+                maskImage: "radial-gradient(ellipse 85% 85% at center, black 50%, transparent 100%)",
+                WebkitMaskImage: "radial-gradient(ellipse 85% 85% at center, black 50%, transparent 100%)",
+              }}
+            >
+              {pieces}
             </div>
           </div>
 
