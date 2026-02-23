@@ -11,6 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Certificates = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -27,7 +28,27 @@ const Certificates = () => {
       duration: 0.8,
       ease: "power3.out"
     });
+  }, []);
 
+  // Auto-rotate certificates
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    let currentIndex = 0;
+    const cards = container.querySelectorAll(".cert-card");
+    const totalCards = cards.length;
+
+    const interval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % totalCards;
+      const card = cards[currentIndex] as HTMLElement;
+      container.scrollTo({
+        left: card.offsetLeft - container.offsetWidth / 2 + card.offsetWidth / 2,
+        behavior: "smooth"
+      });
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const certificates = [
@@ -76,7 +97,7 @@ const Certificates = () => {
         </div>
 
         {/* Horizontal scroll container */}
-        <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent">
+        <div ref={scrollRef} className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent">
           {certificates.map((cert, index) => (
             <div 
               key={index}
