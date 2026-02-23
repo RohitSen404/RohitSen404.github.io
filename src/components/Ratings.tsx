@@ -16,7 +16,6 @@ interface Rating {
 
 const Ratings = () => {
   const [ratings, setRatings] = useState<Rating[]>([]);
-  const [name, setName] = useState("");
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -99,21 +98,7 @@ const Ratings = () => {
           </p>
         </div>
 
-        {/* Rating Form */}
-        <div className="glass-card p-8 rounded-lg mb-12 animate-fade-in">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Your Name
-              </label>
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter your name"
-                maxLength={100}
-                required
-              />
-            </div>
+        {/* Rating Form */
 
             <div>
               <label className="block text-sm font-medium mb-2">
