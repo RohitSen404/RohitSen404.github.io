@@ -41,10 +41,10 @@ const Ratings = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!name.trim() || selectedRating === 0) {
+    if (selectedRating === 0) {
       toast({
         title: "Missing Information",
-        description: "Please provide your name and rating.",
+        description: "Please provide your rating.",
         variant: "destructive",
       });
       return;
@@ -53,7 +53,6 @@ const Ratings = () => {
     setIsSubmitting(true);
 
     const { error } = await supabase.from("ratings").insert({
-      visitor_name: name.trim(),
       rating: selectedRating,
       comment: comment.trim() || null,
     });
