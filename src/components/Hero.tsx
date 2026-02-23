@@ -51,7 +51,7 @@ const Hero = () => {
       {/* Overlay for text readability */}
       <div className="absolute inset-0 z-[1] bg-gradient-to-r from-background via-background/70 to-background/20"></div>
       {/* Bottom fade to blend with next section */}
-      <div className="absolute bottom-0 left-0 right-0 h-[500px] z-[2] bg-gradient-to-t from-background from-20% via-background/70 via-50% to-transparent"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-[350px] z-[2] bg-gradient-to-t from-background via-background/60 via-50% to-transparent"></div>
 
       {/* Atmospheric glows */}
       <div className="absolute top-20 left-20 w-[500px] h-[500px] rounded-full blur-[200px] animate-float" style={{ background: 'rgba(63, 99, 255, 0.08)' }}></div>
