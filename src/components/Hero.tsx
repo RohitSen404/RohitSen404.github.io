@@ -43,7 +43,7 @@ const Hero = () => {
       <div className="hero-3d absolute inset-0 z-0">
         <div
           ref={unicornRef}
-          data-us-project="xXkOrIpehuphTifVeSY6"
+          data-us-project="Y9WzZyvdB10od1Uy3LUc"
           style={{ width: "100%", height: "100%" }}
         ></div>
       </div>
