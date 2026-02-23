@@ -68,7 +68,6 @@ const Ratings = () => {
         title: "Thank you!",
         description: "Your rating has been submitted successfully.",
       });
-      setName("");
       setSelectedRating(0);
       setComment("");
       fetchRatings();
