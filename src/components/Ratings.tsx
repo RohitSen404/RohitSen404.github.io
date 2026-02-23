@@ -189,7 +189,6 @@ const Ratings = () => {
               >
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h4 className="font-semibold text-lg">{rating.visitor_name}</h4>
                     <div className="flex gap-1 mt-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star
