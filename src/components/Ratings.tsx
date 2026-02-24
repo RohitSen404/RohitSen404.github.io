@@ -96,8 +96,9 @@ const Ratings = () => {
           </p>
         </div>
 
-        {/* Rating Form */
-
+        {/* Rating Form */}
+        <div className="glass-card p-8 rounded-lg mb-8 animate-fade-in">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium mb-2">
                 Your Rating
