@@ -173,7 +173,7 @@ const About = () => {
           <div className="about-image flex items-center justify-center">
             <div
               ref={imageContainerRef}
-              className="relative w-[380px] h-[500px] mx-auto cursor-pointer"
+              className="relative w-[320px] h-[600px] mx-auto cursor-pointer"
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
               style={{
