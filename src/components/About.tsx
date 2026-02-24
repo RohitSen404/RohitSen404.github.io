@@ -8,8 +8,8 @@ import {
 } from "lucide-react";
 gsap.registerPlugin(ScrollTrigger);
 
-const GRID_COLS = 5;
-const GRID_ROWS = 5;
+const GRID_COLS = 4;
+const GRID_ROWS = 6;
 
 const About = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -22,15 +22,23 @@ const About = () => {
 
     const pieces = container.querySelectorAll<HTMLDivElement>(".shatter-piece");
 
+    // Store random values per piece so they're consistent
+    const randoms = Array.from(pieces).map(() => ({
+      x: gsap.utils.random(-300, 300),
+      y: gsap.utils.random(-300, 300),
+      rotation: gsap.utils.random(-120, 120),
+      scale: gsap.utils.random(0.2, 0.5),
+    }));
+
     // Set initial scattered state
-    pieces.forEach((piece) => {
+    pieces.forEach((piece, i) => {
       gsap.set(piece, {
         opacity: 0,
-        scale: 0.3,
-        x: gsap.utils.random(-200, 200),
-        y: gsap.utils.random(-200, 200),
-        rotation: gsap.utils.random(-90, 90),
-        filter: "blur(8px)",
+        scale: randoms[i].scale,
+        x: randoms[i].x,
+        y: randoms[i].y,
+        rotation: randoms[i].rotation,
+        filter: "blur(6px)",
       });
     });
 
@@ -38,9 +46,9 @@ const About = () => {
     gsap.to(pieces, {
       scrollTrigger: {
         trigger: section,
-        start: "top 80%",
-        end: "top 30%",
-        scrub: 1,
+        start: "top 85%",
+        end: "top 25%",
+        scrub: 1.5,
       },
       opacity: 1,
       scale: 1,
@@ -49,16 +57,20 @@ const About = () => {
       rotation: 0,
       filter: "blur(0px)",
       stagger: {
-        each: 0.03,
+        each: 0.04,
         from: "center",
       },
-      ease: "power3.out",
+      ease: "power2.inOut",
     });
 
     gsap.from(".about-content", {
       scrollTrigger: { trigger: section, start: "top 70%" },
       opacity: 0, x: 60, filter: "blur(10px)", duration: 1, ease: "power3.out"
     });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
   }, []);
 
   const skills = [
@@ -76,39 +88,28 @@ const About = () => {
     { icon: Palette, name: "Art & Design" },
   ];
 
-  // Generate grid pieces
-  const pieces = [];
+  // Generate grid pieces using background-image approach for correct tiling
+  const gridPieces = [];
   for (let row = 0; row < GRID_ROWS; row++) {
     for (let col = 0; col < GRID_COLS; col++) {
       const xPercent = (col / GRID_COLS) * 100;
       const yPercent = (row / GRID_ROWS) * 100;
       const wPercent = 100 / GRID_COLS;
       const hPercent = 100 / GRID_ROWS;
-      pieces.push(
+      gridPieces.push(
         <div
           key={`${row}-${col}`}
-          className="shatter-piece absolute overflow-hidden"
+          className="shatter-piece absolute"
           style={{
             left: `${xPercent}%`,
             top: `${yPercent}%`,
             width: `${wPercent}%`,
             height: `${hPercent}%`,
+            backgroundImage: `url(${profileImage})`,
+            backgroundSize: `${GRID_COLS * 100}% ${GRID_ROWS * 100}%`,
+            backgroundPosition: `${(col / (GRID_COLS - 1)) * 100}% ${(row / (GRID_ROWS - 1)) * 100}%`,
           }}
-        >
-          <img
-            src={profileImage}
-            alt="Rohit Sen"
-            className="absolute w-full h-full object-cover"
-            style={{
-              /* Position the full image so this piece shows the correct portion */
-              width: `${GRID_COLS * 100}%`,
-              height: `${GRID_ROWS * 100}%`,
-              left: `${-col * 100}%`,
-              top: `${-row * 100}%`,
-              objectFit: "cover",
-            }}
-          />
-        </div>
+        />
       );
     }
   }
@@ -123,14 +124,13 @@ const About = () => {
           <div className="about-image flex items-center justify-center">
             <div
               ref={imageContainerRef}
-              className="relative w-[340px] h-[420px] mx-auto"
+              className="relative w-[320px] h-[480px] mx-auto"
               style={{
-                /* Blend edges with page background using mask */
-                maskImage: "radial-gradient(ellipse 85% 85% at center, black 50%, transparent 100%)",
-                WebkitMaskImage: "radial-gradient(ellipse 85% 85% at center, black 50%, transparent 100%)",
+                maskImage: "radial-gradient(ellipse 90% 90% at center, black 60%, transparent 100%)",
+                WebkitMaskImage: "radial-gradient(ellipse 90% 90% at center, black 60%, transparent 100%)",
               }}
             >
-              {pieces}
+              {gridPieces}
             </div>
           </div>
 
