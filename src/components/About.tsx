@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import profileImage from "@/assets/profile-new.png";
@@ -9,11 +9,14 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 const GRID_COLS = 4;
-const GRID_ROWS = 6;
+const GRID_ROWS = 5;
 
 const About = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
+  const [isAssembled, setIsAssembled] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const hoverTweenRef = useRef<gsap.core.Tween | null>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -22,12 +25,11 @@ const About = () => {
 
     const pieces = container.querySelectorAll<HTMLDivElement>(".shatter-piece");
 
-    // Store random values per piece so they're consistent
     const randoms = Array.from(pieces).map(() => ({
-      x: gsap.utils.random(-300, 300),
-      y: gsap.utils.random(-300, 300),
-      rotation: gsap.utils.random(-120, 120),
-      scale: gsap.utils.random(0.2, 0.5),
+      x: gsap.utils.random(-400, 400),
+      y: gsap.utils.random(-400, 400),
+      rotation: gsap.utils.random(-180, 180),
+      scale: gsap.utils.random(0.15, 0.4),
     }));
 
     // Set initial scattered state
@@ -38,17 +40,20 @@ const About = () => {
         x: randoms[i].x,
         y: randoms[i].y,
         rotation: randoms[i].rotation,
-        filter: "blur(6px)",
+        filter: "blur(8px)",
       });
     });
 
-    // Animate pieces joining together on scroll
-    gsap.to(pieces, {
+    // Slow scroll assembly animation
+    const scrollTween = gsap.to(pieces, {
       scrollTrigger: {
         trigger: section,
-        start: "top 85%",
-        end: "top 25%",
-        scrub: 1.5,
+        start: "top 95%",
+        end: "top 5%",
+        scrub: 3,
+        onUpdate: (self) => {
+          setIsAssembled(self.progress > 0.95);
+        },
       },
       opacity: 1,
       scale: 1,
@@ -57,10 +62,10 @@ const About = () => {
       rotation: 0,
       filter: "blur(0px)",
       stagger: {
-        each: 0.04,
+        each: 0.03,
         from: "center",
       },
-      ease: "power2.inOut",
+      ease: "none",
     });
 
     gsap.from(".about-content", {
@@ -72,6 +77,51 @@ const About = () => {
       ScrollTrigger.getAll().forEach(t => t.kill());
     };
   }, []);
+
+  // Mouse hover shatter/reassemble effect
+  const handleMouseEnter = () => {
+    if (!isAssembled) return;
+    setIsHovering(true);
+    const container = imageContainerRef.current;
+    if (!container) return;
+    const pieces = container.querySelectorAll<HTMLDivElement>(".shatter-piece");
+
+    if (hoverTweenRef.current) hoverTweenRef.current.kill();
+
+    hoverTweenRef.current = gsap.to(pieces, {
+      x: () => gsap.utils.random(-200, 200),
+      y: () => gsap.utils.random(-200, 200),
+      rotation: () => gsap.utils.random(-90, 90),
+      scale: () => gsap.utils.random(0.4, 0.7),
+      opacity: 0.6,
+      filter: "blur(4px)",
+      duration: 0.8,
+      stagger: { each: 0.015, from: "edges" },
+      ease: "power2.out",
+    });
+  };
+
+  const handleMouseLeave = () => {
+    if (!isAssembled) return;
+    setIsHovering(false);
+    const container = imageContainerRef.current;
+    if (!container) return;
+    const pieces = container.querySelectorAll<HTMLDivElement>(".shatter-piece");
+
+    if (hoverTweenRef.current) hoverTweenRef.current.kill();
+
+    hoverTweenRef.current = gsap.to(pieces, {
+      x: 0,
+      y: 0,
+      rotation: 0,
+      scale: 1,
+      opacity: 1,
+      filter: "blur(0px)",
+      duration: 1.2,
+      stagger: { each: 0.02, from: "center" },
+      ease: "elastic.out(1, 0.5)",
+    });
+  };
 
   const skills = [
     { icon: Cloud, name: "Cloud Computing" },
@@ -88,7 +138,6 @@ const About = () => {
     { icon: Palette, name: "Art & Design" },
   ];
 
-  // Generate grid pieces using background-image approach for correct tiling
   const gridPieces = [];
   for (let row = 0; row < GRID_ROWS; row++) {
     for (let col = 0; col < GRID_COLS; col++) {
@@ -124,13 +173,23 @@ const About = () => {
           <div className="about-image flex items-center justify-center">
             <div
               ref={imageContainerRef}
-              className="relative w-[320px] h-[480px] mx-auto"
+              className="relative w-[380px] h-[500px] mx-auto cursor-pointer"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
               style={{
-                maskImage: "radial-gradient(ellipse 90% 90% at center, black 60%, transparent 100%)",
-                WebkitMaskImage: "radial-gradient(ellipse 90% 90% at center, black 60%, transparent 100%)",
+                maskImage: "radial-gradient(ellipse 95% 95% at center, black 65%, transparent 100%)",
+                WebkitMaskImage: "radial-gradient(ellipse 95% 95% at center, black 65%, transparent 100%)",
               }}
             >
               {gridPieces}
+              {/* Glow overlay */}
+              <div
+                className="absolute inset-0 pointer-events-none rounded-full"
+                style={{
+                  background: "radial-gradient(ellipse at center, hsl(228 100% 62% / 0.08) 0%, hsl(42 50% 57% / 0.05) 40%, transparent 70%)",
+                  mixBlendMode: "screen",
+                }}
+              />
             </div>
           </div>
 
