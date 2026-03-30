@@ -10,6 +10,8 @@ interface TerminalLine {
 
 const PROMPT = "rohit@portfolio:~$ ";
 
+const AUTO_COMMANDS = ["whoami", "about", "projects", "skills"];
+
 const TerminalEngine = () => {
   const { toggleMode } = useMode();
   const [lines, setLines] = useState<TerminalLine[]>([]);
@@ -17,8 +19,11 @@ const TerminalEngine = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
+  const [autoPhase, setAutoPhase] = useState(true);
+  const [idleTimer, setIdleTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortRef = useRef(false);
 
   const scrollToBottom = useCallback(() => {
     if (containerRef.current) {
@@ -26,23 +31,22 @@ const TerminalEngine = () => {
     }
   }, []);
 
-  useEffect(scrollToBottom, [lines, scrollToBottom]);
+  useEffect(scrollToBottom, [lines, input, scrollToBottom]);
 
   const typeOutputLines = useCallback(
-    async (outputs: CommandOutput[], onDone: () => void) => {
+    async (outputs: CommandOutput[]): Promise<void> => {
       for (const out of outputs) {
+        if (abortRef.current) return;
         if (out.delay) {
           await new Promise((r) => setTimeout(r, out.delay));
         }
-
-        // Type character by character
         const text = out.text;
         if (text.length === 0) {
           setLines((prev) => [...prev, { text: "", color: out.color }]);
         } else {
-          // Add empty line then fill it
           setLines((prev) => [...prev, { text: "", color: out.color }]);
           for (let i = 0; i < text.length; i++) {
+            if (abortRef.current) return;
             const partial = text.slice(0, i + 1);
             setLines((prev) => {
               const next = [...prev];
@@ -53,17 +57,99 @@ const TerminalEngine = () => {
           }
         }
       }
-      onDone();
     },
     []
   );
 
+  // Simulate typing a command character by character into the input
+  const simulateTyping = useCallback(
+    async (cmd: string): Promise<void> => {
+      for (let i = 0; i < cmd.length; i++) {
+        if (abortRef.current) return;
+        const partial = cmd.slice(0, i + 1);
+        setInput(partial);
+        await new Promise((r) => setTimeout(r, 30 + Math.random() * 50));
+      }
+    },
+    []
+  );
+
+  // Run auto command sequence
+  useEffect(() => {
+    if (!autoPhase) return;
+    abortRef.current = false;
+    setIsProcessing(true);
+
+    const run = async () => {
+      // Initial delay before auto-sequence starts
+      await new Promise((r) => setTimeout(r, 600));
+
+      for (const cmd of AUTO_COMMANDS) {
+        if (abortRef.current) return;
+
+        // Random pre-typing pause
+        await new Promise((r) => setTimeout(r, 400 + Math.random() * 800));
+
+        // Simulate typing the command
+        await simulateTyping(cmd);
+
+        // Small pause before "pressing enter"
+        await new Promise((r) => setTimeout(r, 200 + Math.random() * 300));
+
+        // Commit the prompt line
+        setLines((prev) => [...prev, { text: PROMPT + cmd, isPrompt: true }]);
+        setInput("");
+
+        // Execute and render output
+        const { output } = executeCommand(cmd);
+        if (output.length > 0) {
+          await typeOutputLines(output);
+        }
+      }
+
+      if (!abortRef.current) {
+        setAutoPhase(false);
+        setIsProcessing(false);
+      }
+    };
+
+    run();
+
+    return () => {
+      abortRef.current = true;
+    };
+  }, [autoPhase, simulateTyping, typeOutputLines]);
+
+  // Idle hint timer
+  const resetIdleTimer = useCallback(() => {
+    if (idleTimer) clearTimeout(idleTimer);
+    if (autoPhase) return;
+    const timer = setTimeout(() => {
+      setLines((prev) => [
+        ...prev,
+        { text: "" },
+        { text: '  💡 Type "help" to explore commands', color: "#008F11" },
+        { text: "" },
+      ]);
+    }, 15000);
+    setIdleTimer(timer);
+  }, [idleTimer, autoPhase]);
+
+  // Reset idle timer on user activity
+  useEffect(() => {
+    if (!autoPhase && !isProcessing) {
+      resetIdleTimer();
+    }
+    return () => {
+      if (idleTimer) clearTimeout(idleTimer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoPhase, isProcessing]);
+
   const handleSubmit = useCallback(() => {
-    if (isProcessing) return;
+    if (isProcessing || autoPhase) return;
 
     const cmd = input.trim();
-
-    // Add prompt + command to output
     setLines((prev) => [...prev, { text: PROMPT + input, isPrompt: true }]);
     setInput("");
 
@@ -71,6 +157,7 @@ const TerminalEngine = () => {
       setHistory((prev) => [cmd, ...prev.slice(0, 49)]);
     }
     setHistoryIdx(-1);
+    resetIdleTimer();
 
     const { output, special } = executeCommand(cmd);
 
@@ -81,7 +168,7 @@ const TerminalEngine = () => {
 
     if (output.length > 0) {
       setIsProcessing(true);
-      typeOutputLines(output, () => {
+      typeOutputLines(output).then(() => {
         setIsProcessing(false);
         if (special === "exit") {
           setTimeout(toggleMode, 600);
@@ -90,7 +177,7 @@ const TerminalEngine = () => {
     } else if (special === "exit") {
       setTimeout(toggleMode, 300);
     }
-  }, [input, isProcessing, typeOutputLines, toggleMode]);
+  }, [input, isProcessing, autoPhase, typeOutputLines, toggleMode, resetIdleTimer]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -116,14 +203,13 @@ const TerminalEngine = () => {
     }
   };
 
-  // Focus input on click anywhere
   const handleContainerClick = () => {
-    inputRef.current?.focus();
+    if (!autoPhase) inputRef.current?.focus();
   };
 
   useEffect(() => {
-    inputRef.current?.focus();
-  }, [isProcessing]);
+    if (!isProcessing && !autoPhase) inputRef.current?.focus();
+  }, [isProcessing, autoPhase]);
 
   return (
     <div
@@ -141,29 +227,41 @@ const TerminalEngine = () => {
         </div>
       ))}
 
-      {/* Active input line */}
+      {/* Active input / auto-typing line */}
       <div className="terminal-line flex items-center">
         <span style={{ color: "#00FF00" }}>{PROMPT}</span>
         <div className="relative flex-1">
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            disabled={isProcessing}
-            className="terminal-input"
-            autoFocus
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck={false}
-          />
-          {!isProcessing && (
-            <span
-              className="terminal-cursor"
-              style={{ left: `${input.length}ch` }}
-            />
+          {autoPhase ? (
+            <>
+              <span className="terminal-auto-text">{input}</span>
+              <span
+                className="terminal-cursor"
+                style={{ left: `${input.length}ch` }}
+              />
+            </>
+          ) : (
+            <>
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                disabled={isProcessing}
+                className="terminal-input"
+                autoFocus
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
+              />
+              {!isProcessing && (
+                <span
+                  className="terminal-cursor"
+                  style={{ left: `${input.length}ch` }}
+                />
+              )}
+            </>
           )}
         </div>
       </div>
