@@ -14,12 +14,6 @@ const RED = "#FF0033";
 const WHITE = "#CCCCCC";
 const BRIGHT_GREEN = "#33FF33";
 
-// Build a progress bar string from a skill level
-const bar = (level: number): string => {
-  const filled = Math.round(level / 5);
-  const empty = 20 - filled;
-  return "█".repeat(filled) + "░".repeat(empty);
-};
 
 const commands: Record<string, CommandHandler> = {
   help: () => [
@@ -91,14 +85,9 @@ const commands: Record<string, CommandHandler> = {
     ];
 
     const addGroup = (title: string, items: { name: string; level: number }[]) => {
-      lines.push({ text: `  ${title}`, color: GREEN });
-      items.forEach((s, i) => {
-        const prefix = i === items.length - 1 ? "└──" : "├──";
-        const nameStr = s.name.padEnd(18);
-        lines.push({
-          text: `  ${prefix} ${nameStr}${bar(s.level)}  ${s.level}%`,
-          color: WHITE,
-        });
+      lines.push({ text: `  [ ${title} ]`, color: GREEN });
+      items.forEach((s) => {
+        lines.push({ text: `    • ${s.name}`, color: WHITE });
       });
       lines.push({ text: "" });
     };

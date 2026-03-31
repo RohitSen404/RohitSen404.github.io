@@ -160,6 +160,26 @@ All colors MUST be HSL.
   display: inline-block;
 }
 
+.terminal-dot-exit {
+  cursor: pointer;
+  position: relative;
+  border: none;
+  padding: 0;
+  /* Larger tap area via pseudo-element */
+}
+
+.terminal-dot-exit::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+}
+
+.terminal-dot-exit:hover {
+  filter: brightness(1.3);
+  box-shadow: 0 0 8px rgba(255, 95, 87, 0.6);
+}
+
 .terminal-topbar-title {
   font-size: 13px;
   color: #008F11;
