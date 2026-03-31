@@ -91,14 +91,9 @@ const commands: Record<string, CommandHandler> = {
     ];
 
     const addGroup = (title: string, items: { name: string; level: number }[]) => {
-      lines.push({ text: `  ${title}`, color: GREEN });
-      items.forEach((s, i) => {
-        const prefix = i === items.length - 1 ? "└──" : "├──";
-        const nameStr = s.name.padEnd(18);
-        lines.push({
-          text: `  ${prefix} ${nameStr}${bar(s.level)}  ${s.level}%`,
-          color: WHITE,
-        });
+      lines.push({ text: `  [ ${title} ]`, color: GREEN });
+      items.forEach((s) => {
+        lines.push({ text: `    • ${s.name}`, color: WHITE });
       });
       lines.push({ text: "" });
     };
