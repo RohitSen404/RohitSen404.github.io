@@ -29,7 +29,7 @@ const AppContent = () => {
           </Routes>
         </HashRouter>
       )}
-      <FloatingModeSwitch />
+      {mode !== "hacker" && <FloatingModeSwitch />}
     </div>
   );
 };
