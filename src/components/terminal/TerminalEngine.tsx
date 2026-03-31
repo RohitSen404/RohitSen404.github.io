@@ -6,9 +6,11 @@ interface TerminalLine {
   text: string;
   color?: string;
   isPrompt?: boolean;
+  isRootPrompt?: boolean;
 }
 
-const PROMPT = "rohit@portfolio:~$ ";
+const PROMPT_USER = "rohit@portfolio:~$ ";
+const PROMPT_ROOT_PREFIX = "\x1Broot\x1B@rohit:~# "; // \x1B used as marker for red coloring
 
 const AUTO_COMMANDS = ["whoami", "about", "projects", "skills"];
 
@@ -20,10 +22,13 @@ const TerminalEngine = () => {
   const [history, setHistory] = useState<string[]>([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
   const [autoPhase, setAutoPhase] = useState(true);
+  const [isRoot, setIsRoot] = useState(false);
   const [idleTimer, setIdleTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef(false);
+
+  const prompt = isRoot ? PROMPT_ROOT_PREFIX : PROMPT_USER;
 
   const scrollToBottom = useCallback(() => {
     if (containerRef.current) {
@@ -61,7 +66,6 @@ const TerminalEngine = () => {
     []
   );
 
-  // Simulate typing a command character by character into the input
   const simulateTyping = useCallback(
     async (cmd: string): Promise<void> => {
       for (let i = 0; i < cmd.length; i++) {
@@ -81,26 +85,26 @@ const TerminalEngine = () => {
     setIsProcessing(true);
 
     const run = async () => {
-      // Initial delay before auto-sequence starts
       await new Promise((r) => setTimeout(r, 600));
 
+      // First auto-run sudo to get root
+      await new Promise((r) => setTimeout(r, 400 + Math.random() * 600));
+      await simulateTyping("sudo");
+      await new Promise((r) => setTimeout(r, 200 + Math.random() * 300));
+      setLines((prev) => [...prev, { text: PROMPT_USER + "sudo", isPrompt: true }]);
+      setInput("");
+      const { output: sudoOutput } = executeCommand("sudo");
+      await typeOutputLines(sudoOutput);
+      setIsRoot(true);
+
+      // Now run remaining commands as root
       for (const cmd of AUTO_COMMANDS) {
         if (abortRef.current) return;
-
-        // Random pre-typing pause
         await new Promise((r) => setTimeout(r, 400 + Math.random() * 800));
-
-        // Simulate typing the command
         await simulateTyping(cmd);
-
-        // Small pause before "pressing enter"
         await new Promise((r) => setTimeout(r, 200 + Math.random() * 300));
-
-        // Commit the prompt line
-        setLines((prev) => [...prev, { text: PROMPT + cmd, isPrompt: true }]);
+        setLines((prev) => [...prev, { text: cmd, isPrompt: true, isRootPrompt: true }]);
         setInput("");
-
-        // Execute and render output
         const { output } = executeCommand(cmd);
         if (output.length > 0) {
           await typeOutputLines(output);
@@ -114,10 +118,7 @@ const TerminalEngine = () => {
     };
 
     run();
-
-    return () => {
-      abortRef.current = true;
-    };
+    return () => { abortRef.current = true; };
   }, [autoPhase, simulateTyping, typeOutputLines]);
 
   // Idle hint timer
@@ -135,49 +136,39 @@ const TerminalEngine = () => {
     setIdleTimer(timer);
   }, [idleTimer, autoPhase]);
 
-  // Reset idle timer on user activity
   useEffect(() => {
-    if (!autoPhase && !isProcessing) {
-      resetIdleTimer();
-    }
-    return () => {
-      if (idleTimer) clearTimeout(idleTimer);
-    };
+    if (!autoPhase && !isProcessing) resetIdleTimer();
+    return () => { if (idleTimer) clearTimeout(idleTimer); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoPhase, isProcessing]);
 
   const handleSubmit = useCallback(() => {
     if (isProcessing || autoPhase) return;
-
     const cmd = input.trim();
-    setLines((prev) => [...prev, { text: PROMPT + input, isPrompt: true }]);
+    setLines((prev) => [
+      ...prev,
+      { text: cmd, isPrompt: true, isRootPrompt: isRoot },
+    ]);
     setInput("");
-
-    if (cmd) {
-      setHistory((prev) => [cmd, ...prev.slice(0, 49)]);
-    }
+    if (cmd) setHistory((prev) => [cmd, ...prev.slice(0, 49)]);
     setHistoryIdx(-1);
     resetIdleTimer();
 
     const { output, special } = executeCommand(cmd);
 
-    if (special === "clear") {
-      setLines([]);
-      return;
-    }
+    if (special === "clear") { setLines([]); return; }
+    if (special === "sudo") { setIsRoot(true); }
 
     if (output.length > 0) {
       setIsProcessing(true);
       typeOutputLines(output).then(() => {
         setIsProcessing(false);
-        if (special === "exit") {
-          setTimeout(toggleMode, 600);
-        }
+        if (special === "exit") setTimeout(toggleMode, 600);
       });
     } else if (special === "exit") {
       setTimeout(toggleMode, 300);
     }
-  }, [input, isProcessing, autoPhase, typeOutputLines, toggleMode, resetIdleTimer]);
+  }, [input, isProcessing, autoPhase, isRoot, typeOutputLines, toggleMode, resetIdleTimer]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -211,6 +202,18 @@ const TerminalEngine = () => {
     if (!isProcessing && !autoPhase) inputRef.current?.focus();
   }, [isProcessing, autoPhase]);
 
+  const renderPrompt = (root: boolean) => {
+    if (root) {
+      return (
+        <>
+          <span style={{ color: "#FF0033" }}>root</span>
+          <span style={{ color: "#00FF00" }}>@rohit:~# </span>
+        </>
+      );
+    }
+    return <span style={{ color: "#00FF00" }}>{PROMPT_USER}</span>;
+  };
+
   return (
     <div
       ref={containerRef}
@@ -218,26 +221,26 @@ const TerminalEngine = () => {
       onClick={handleContainerClick}
     >
       {lines.map((line, i) => (
-        <div
-          key={i}
-          className="terminal-line"
-          style={{ color: line.color || (line.isPrompt ? "#00FF00" : undefined) }}
-        >
-          {line.text || "\u00A0"}
+        <div key={i} className="terminal-line" style={{ color: line.color || (line.isPrompt ? "#00FF00" : undefined) }}>
+          {line.isPrompt ? (
+            <>
+              {renderPrompt(!!line.isRootPrompt)}
+              <span>{line.text}</span>
+            </>
+          ) : (
+            line.text || "\u00A0"
+          )}
         </div>
       ))}
 
-      {/* Active input / auto-typing line */}
+      {/* Active input line */}
       <div className="terminal-line flex items-center">
-        <span style={{ color: "#00FF00" }}>{PROMPT}</span>
+        {renderPrompt(isRoot)}
         <div className="relative flex-1">
           {autoPhase ? (
             <>
               <span className="terminal-auto-text">{input}</span>
-              <span
-                className="terminal-cursor"
-                style={{ left: `${input.length}ch` }}
-              />
+              <span className="terminal-cursor" style={{ left: `${input.length}ch` }} />
             </>
           ) : (
             <>
@@ -256,10 +259,7 @@ const TerminalEngine = () => {
                 spellCheck={false}
               />
               {!isProcessing && (
-                <span
-                  className="terminal-cursor"
-                  style={{ left: `${input.length}ch` }}
-                />
+                <span className="terminal-cursor" style={{ left: `${input.length}ch` }} />
               )}
             </>
           )}
