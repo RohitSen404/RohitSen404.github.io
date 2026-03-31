@@ -14,12 +14,6 @@ const RED = "#FF0033";
 const WHITE = "#CCCCCC";
 const BRIGHT_GREEN = "#33FF33";
 
-// Build a progress bar string from a skill level
-const bar = (level: number): string => {
-  const filled = Math.round(level / 5);
-  const empty = 20 - filled;
-  return "█".repeat(filled) + "░".repeat(empty);
-};
 
 const commands: Record<string, CommandHandler> = {
   help: () => [
