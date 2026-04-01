@@ -136,7 +136,12 @@ export const executeCommand = (
   const trimmed = input.trim().toLowerCase();
 
   if (trimmed === "") return { output: [] };
-  if (trimmed === "clear") return { output: [], special: "clear" };
+  if (trimmed === "clear" || trimmed === "cls") return { output: [], special: "clear" };
+  if (trimmed === "start" || trimmed === "run")
+    return {
+      output: [{ text: "  Restarting session...", color: GREEN, delay: 200 }],
+      special: "restart",
+    };
   if (trimmed === "exit")
     return {
       output: [{ text: "  Switching to Normal Mode...", color: GREEN, delay: 200 }],
