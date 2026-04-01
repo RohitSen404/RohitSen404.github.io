@@ -28,6 +28,7 @@ const commands: Record<string, CommandHandler> = {
     { text: "  contact     Show contact configuration", color: DIM_GREEN },
     { text: "  sudo        Elevate to root privileges", color: DIM_GREEN },
     { text: "  clear       Clear terminal screen", color: DIM_GREEN },
+    { text: "  start       Restart full demo sequence", color: DIM_GREEN },
     { text: "  exit        Switch to Normal Mode", color: DIM_GREEN },
     { text: "" },
   ],
@@ -136,7 +137,12 @@ export const executeCommand = (
   const trimmed = input.trim().toLowerCase();
 
   if (trimmed === "") return { output: [] };
-  if (trimmed === "clear") return { output: [], special: "clear" };
+  if (trimmed === "clear" || trimmed === "cls") return { output: [], special: "clear" };
+  if (trimmed === "start" || trimmed === "run")
+    return {
+      output: [{ text: "  Restarting session...", color: GREEN, delay: 200 }],
+      special: "restart",
+    };
   if (trimmed === "exit")
     return {
       output: [{ text: "  Switching to Normal Mode...", color: GREEN, delay: 200 }],
