@@ -10,9 +10,32 @@ interface TerminalLine {
 }
 
 const PROMPT_USER = "rohit@portfolio:~$ ";
-const PROMPT_ROOT_PREFIX = "\x1Broot\x1B@rohit:~# "; // \x1B used as marker for red coloring
+const PROMPT_ROOT_PREFIX = "\x1Broot\x1B@rohit:~# ";
 
 const AUTO_COMMANDS = ["whoami", "about", "projects", "skills"];
+
+const GREEN = "#00FF00";
+const DIM_GREEN = "#008F11";
+
+const generateSessionInfo = (): CommandOutput[] => {
+  const sessionId = `RS-${Math.floor(1000 + Math.random() * 9000)}-${String.fromCharCode(65 + Math.floor(Math.random() * 26))}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`;
+  const ip = `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(1 + Math.random() * 254)}`;
+  const port = 3000 + Math.floor(Math.random() * 6001);
+
+  return [
+    { text: "", delay: 200 },
+    { text: "  > Initializing session...", color: DIM_GREEN, delay: 600 },
+    { text: "  > Connecting...", color: DIM_GREEN, delay: 800 },
+    { text: "" },
+    { text: "  ┌─────────────────────────────────────────────┐", color: GREEN },
+    { text: `  │  Session ID :  ${sessionId.padEnd(28)}│`, color: GREEN },
+    { text: `  │  IP Address :  ${ip.padEnd(28)}│`, color: GREEN },
+    { text: `  │  Port       :  ${String(port).padEnd(28)}│`, color: GREEN },
+    { text: `  │  Status     :  ${"Connected".padEnd(28)}│`, color: GREEN },
+    { text: "  └─────────────────────────────────────────────┘", color: GREEN },
+    { text: "" },
+  ];
+};
 
 const TerminalEngine = () => {
   const { toggleMode } = useMode();
@@ -24,6 +47,7 @@ const TerminalEngine = () => {
   const [autoPhase, setAutoPhase] = useState(true);
   const [isRoot, setIsRoot] = useState(false);
   const [idleTimer, setIdleTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [runKey, setRunKey] = useState(0); // triggers restart
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef(false);
@@ -78,7 +102,7 @@ const TerminalEngine = () => {
     []
   );
 
-  // Run auto command sequence
+  // Run auto command sequence (triggered by runKey)
   useEffect(() => {
     if (!autoPhase) return;
     abortRef.current = false;
@@ -87,7 +111,11 @@ const TerminalEngine = () => {
     const run = async () => {
       await new Promise((r) => setTimeout(r, 600));
 
-      // First auto-run sudo to get root
+      // Session info
+      const sessionLines = generateSessionInfo();
+      await typeOutputLines(sessionLines);
+
+      // Sudo
       await new Promise((r) => setTimeout(r, 400 + Math.random() * 600));
       await simulateTyping("sudo");
       await new Promise((r) => setTimeout(r, 200 + Math.random() * 300));
@@ -97,7 +125,7 @@ const TerminalEngine = () => {
       await typeOutputLines(sudoOutput);
       setIsRoot(true);
 
-      // Now run remaining commands as root
+      // Auto commands
       for (const cmd of AUTO_COMMANDS) {
         if (abortRef.current) return;
         await new Promise((r) => setTimeout(r, 400 + Math.random() * 800));
@@ -112,6 +140,13 @@ const TerminalEngine = () => {
       }
 
       if (!abortRef.current) {
+        // Show hint after auto-run
+        setLines((prev) => [
+          ...prev,
+          { text: "" },
+          { text: '  💡 Type "clear" to reset  •  "start" to run again  •  "help" for all commands', color: DIM_GREEN },
+          { text: "" },
+        ]);
         setAutoPhase(false);
         setIsProcessing(false);
       }
@@ -119,7 +154,7 @@ const TerminalEngine = () => {
 
     run();
     return () => { abortRef.current = true; };
-  }, [autoPhase, simulateTyping, typeOutputLines]);
+  }, [autoPhase, runKey, simulateTyping, typeOutputLines]);
 
   // Idle hint timer
   const resetIdleTimer = useCallback(() => {
@@ -129,7 +164,7 @@ const TerminalEngine = () => {
       setLines((prev) => [
         ...prev,
         { text: "" },
-        { text: '  💡 Type "help" to explore commands', color: "#008F11" },
+        { text: '  💡 Type "help" to explore commands', color: DIM_GREEN },
         { text: "" },
       ]);
     }, 15000);
@@ -158,6 +193,14 @@ const TerminalEngine = () => {
 
     if (special === "clear") { setLines([]); return; }
     if (special === "sudo") { setIsRoot(true); }
+    if (special === "restart") {
+      // Reset state and trigger full sequence again
+      setLines([]);
+      setIsRoot(false);
+      setAutoPhase(true);
+      setRunKey((k) => k + 1);
+      return;
+    }
 
     if (output.length > 0) {
       setIsProcessing(true);
