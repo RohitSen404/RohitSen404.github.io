@@ -28,6 +28,7 @@ const commands: Record<string, CommandHandler> = {
     { text: "  contact     Show contact configuration", color: DIM_GREEN },
     { text: "  sudo        Elevate to root privileges", color: DIM_GREEN },
     { text: "  clear       Clear terminal screen", color: DIM_GREEN },
+    { text: "  start       Restart full demo sequence", color: DIM_GREEN },
     { text: "  exit        Switch to Normal Mode", color: DIM_GREEN },
     { text: "" },
   ],
