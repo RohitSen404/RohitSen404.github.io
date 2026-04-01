@@ -159,17 +159,7 @@ const TerminalEngine = () => {
   // Idle hint timer
   const resetIdleTimer = useCallback(() => {
     if (idleTimer) clearTimeout(idleTimer);
-    if (autoPhase) return;
-    const timer = setTimeout(() => {
-      setLines((prev) => [
-        ...prev,
-        { text: "" },
-        { text: '  💡 Type "help" to explore commands', color: DIM_GREEN },
-        { text: "" },
-      ]);
-    }, 15000);
-    setIdleTimer(timer);
-  }, [idleTimer, autoPhase]);
+  }, [idleTimer]);
 
   useEffect(() => {
     if (!autoPhase && !isProcessing) resetIdleTimer();
