@@ -4,9 +4,9 @@
 export const identity = {
   name: "Rohit Sen",
   role: "Web Developer & Creative Technologist",
-  tagline: "Developer | Ethical Hacker | Creator",
+  tagline: "Developer | Designer | Creator",
   location: "India",
-  focus: "Web Development & Ethical Hacking",
+  focus: "Web Development & Creative Technology",
   passions: ["Photography", "Design", "Creative Technology"],
   status: "Available for projects",
 };

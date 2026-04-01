@@ -23,6 +23,12 @@ const HackerMode = () => {
     <div className="terminal-screen">
       {/* Fake OS top bar */}
       <div className="terminal-topbar">
+        <button
+          onClick={handleExit}
+          className="terminal-exit-btn"
+        >
+          Exit
+        </button>
         <div className="flex items-center gap-2">
           <button
             onClick={handleExit}
@@ -33,7 +39,7 @@ const HackerMode = () => {
           <span className="terminal-dot" style={{ background: "#FEBC2E" }} />
           <span className="terminal-dot" style={{ background: "#28C840" }} />
         </div>
-        <span className="terminal-topbar-title">root@rohit: ~</span>
+        <span className="terminal-topbar-title">rohit@portfolio: ~</span>
       </div>
 
       {/* Terminal body */}
