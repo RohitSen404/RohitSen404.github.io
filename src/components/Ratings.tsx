@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+
+const hasBackendConfig = Boolean(
+  import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+);
 
 interface Rating {
   id: string;
@@ -26,6 +29,9 @@ const Ratings = () => {
   }, []);
 
   const fetchRatings = async () => {
+    if (!hasBackendConfig) return;
+
+    const { supabase } = await import("@/integrations/supabase/client");
     const { data, error } = await supabase
       .from("ratings")
       .select("*")
@@ -49,8 +55,18 @@ const Ratings = () => {
       return;
     }
 
+    if (!hasBackendConfig) {
+      toast({
+        title: "Ratings unavailable",
+        description: "The page is running without rating storage configured.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
+    const { supabase } = await import("@/integrations/supabase/client");
     const { error } = await supabase.from("ratings").insert({
       visitor_name: "Anonymous",
       rating: selectedRating,
