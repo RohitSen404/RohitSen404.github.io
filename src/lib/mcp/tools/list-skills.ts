@@ -1,6 +1,6 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { skills } from "../../data/portfolio";
+import { skills } from "../../../data/portfolio";
 
 const categories = ["frontend", "backend", "security", "cloud", "other", "all"] as const;
 

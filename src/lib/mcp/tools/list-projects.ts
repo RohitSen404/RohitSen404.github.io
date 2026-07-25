@@ -1,5 +1,5 @@
 import { defineTool } from "@lovable.dev/mcp-js";
-import { projects } from "../../data/portfolio";
+import { projects } from "../../../data/portfolio";
 
 export default defineTool({
   name: "list_projects",

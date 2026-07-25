@@ -7,7 +7,68 @@ import { defineMcp } from "npm:@lovable.dev/mcp-js@0.24.0";
 
 // src/lib/mcp/tools/whoami.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.24.0";
-import { identity } from "npm:@/data/portfolio";
+
+// src/data/portfolio.ts
+var identity = {
+  name: "Rohit Sen",
+  role: "Web Developer & Creative Technologist",
+  tagline: "Developer | Designer | Creator",
+  location: "India",
+  focus: "Web Development & Creative Technology",
+  passions: ["Photography", "Design", "Creative Technology"],
+  status: "Available for projects"
+};
+var aboutParagraphs = [
+  "Computer Science & Technology diploma student with strong skills in Cloud Computing, Networking, and OCI Certified AI Foundations Associate. Hands-on experience as an intern at Ardent Private Limited.",
+  "Interests include ethical hacking and problem-solving. Aiming to grow as a professional in computer science and AI-driven technologies, while continuously upgrading technical and analytical skills."
+];
+var skills = {
+  frontend: [
+    { name: "React", level: 90 },
+    { name: "TypeScript", level: 85 },
+    { name: "Tailwind CSS", level: 90 },
+    { name: "JavaScript", level: 92 }
+  ],
+  backend: [
+    { name: "Python", level: 85 },
+    { name: "Node.js", level: 80 },
+    { name: "SQL", level: 75 }
+  ],
+  security: [
+    { name: "Ethical Hacking", level: 80 },
+    { name: "Network Security", level: 75 }
+  ],
+  cloud: [
+    { name: "Oracle Cloud (OCI)", level: 87 },
+    { name: "Microsoft Azure", level: 83 }
+  ],
+  other: [
+    { name: "IoT", level: 82 },
+    { name: "AI Foundations", level: 85 },
+    { name: "DBMS", level: 88 },
+    { name: "Photography", level: 90 },
+    { name: "Art & Design", level: 82 },
+    { name: "Communication", level: 92 }
+  ]
+};
+var projects = [
+  { name: "weather-app", description: "Real-time weather application" },
+  { name: "portfolio-site", description: "Personal portfolio website" },
+  { name: "future-ai-project", description: "AI-driven experimental project" },
+  { name: "ethical-hacking-toolkit", description: "Security tools & scripts" }
+];
+var contact = {
+  email: "rohitsen7501@gmail.com",
+  github: "github.com/RohitSen404",
+  linkedin: "linkedin.com/in/rohit-sen-941a9b256"
+};
+var socialLinks = {
+  github: "https://github.com/RohitSen404",
+  linkedin: "https://www.linkedin.com/in/rohit-sen-941a9b256",
+  email: "mailto:rohitsen7501@gmail.com"
+};
+
+// src/lib/mcp/tools/whoami.ts
 var whoami_default = defineTool({
   name: "whoami",
   title: "Who is Rohit Sen",
@@ -22,7 +83,6 @@ var whoami_default = defineTool({
 
 // src/lib/mcp/tools/get-about.ts
 import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.24.0";
-import { aboutParagraphs, identity as identity2 } from "npm:@/data/portfolio";
 var get_about_default = defineTool2({
   name: "get_about",
   title: "Get about section",
@@ -31,14 +91,13 @@ var get_about_default = defineTool2({
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => ({
     content: [{ type: "text", text: aboutParagraphs.join("\n\n") }],
-    structuredContent: { identity: identity2, about: aboutParagraphs }
+    structuredContent: { identity, about: aboutParagraphs }
   })
 });
 
 // src/lib/mcp/tools/list-skills.ts
 import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.24.0";
 import { z } from "npm:zod@^3.25.76";
-import { skills } from "npm:@/data/portfolio";
 var categories = ["frontend", "backend", "security", "cloud", "other", "all"];
 var list_skills_default = defineTool3({
   name: "list_skills",
@@ -60,7 +119,6 @@ var list_skills_default = defineTool3({
 
 // src/lib/mcp/tools/list-projects.ts
 import { defineTool as defineTool4 } from "npm:@lovable.dev/mcp-js@0.24.0";
-import { projects } from "npm:@/data/portfolio";
 var list_projects_default = defineTool4({
   name: "list_projects",
   title: "List projects",
@@ -75,7 +133,6 @@ var list_projects_default = defineTool4({
 
 // src/lib/mcp/tools/get-contact.ts
 import { defineTool as defineTool5 } from "npm:@lovable.dev/mcp-js@0.24.0";
-import { contact, socialLinks } from "npm:@/data/portfolio";
 var get_contact_default = defineTool5({
   name: "get_contact",
   title: "Get contact info",

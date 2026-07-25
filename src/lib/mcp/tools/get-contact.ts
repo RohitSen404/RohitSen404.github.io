@@ -1,5 +1,5 @@
 import { defineTool } from "@lovable.dev/mcp-js";
-import { contact, socialLinks } from "../../data/portfolio";
+import { contact, socialLinks } from "../../../data/portfolio";
 
 export default defineTool({
   name: "get_contact",

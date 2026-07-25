@@ -1,5 +1,5 @@
 import { defineTool } from "@lovable.dev/mcp-js";
-import { identity } from "../../data/portfolio";
+import { identity } from "../../../data/portfolio";
 
 export default defineTool({
   name: "whoami",
