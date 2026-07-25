@@ -1,5 +1,5 @@
 import { defineTool } from "@lovable.dev/mcp-js";
-import { aboutParagraphs, identity } from "@/data/portfolio";
+import { aboutParagraphs, identity } from "../../data/portfolio";
 
 export default defineTool({
   name: "get_about",
