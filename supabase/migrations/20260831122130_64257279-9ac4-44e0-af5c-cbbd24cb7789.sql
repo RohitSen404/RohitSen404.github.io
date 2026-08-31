@@ -1,0 +1,1 @@
+COMMENT ON SCHEMA public IS 'Portfolio application schema';
